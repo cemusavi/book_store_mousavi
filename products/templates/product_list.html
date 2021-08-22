@@ -1,0 +1,104 @@
+{% extends 'shared/_Main_page.html' %}
+{% load static %}
+
+
+{% block content %}
+<<<<<<< HEAD
+<div  class="best-sell"><h3><b>پر فروش ترین ها</b></h3></div>
+=======
+    <br><br>
+    <h3 style="text-align: right">پر فروش ترین ها</h3><br>
+>>>>>>> 2e567137b12a8e3fc6bf62255974ab8998a032a4
+    <div id="container">
+        {% if max_sales %}
+            {% for book in max_sales %}
+                <div class="book-instance">
+                    <div class="book-img">
+                        <a href="{% url 'products:products-detail' book.slug %}">
+                            <img src="{{ book.cover.url }}" alt="">
+                        </a>
+                    </div>
+                    <div class="details">
+                        <div class="title">
+                            {{ book.book.title }}
+                        </div>
+                        <div class="more">
+                            <a href="{% url 'products:products-detail' book.slug %}">بیشتر</a>
+                        </div>
+
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <br><br>
+    {% if products %}
+<<<<<<< HEAD
+    <div class="all-product"><h3><b>کل محصولات</b></h3></div>
+=======
+        <h3>کل محصولات</h3>
+>>>>>>> 2e567137b12a8e3fc6bf62255974ab8998a032a4
+        <div id="container">
+            {% for product in products %}
+                <div class="book-instance">
+                    <div class="book-img">
+                        <a href="{% url 'products:products-detail' product.slug %}">
+                            <img src="{{ product.cover.url }}" alt="">
+                        </a>
+                    </div>
+                    <div class="details">
+                        <div class="title">
+                            {{ product.book.title }}
+                        </div>
+                        <div class="more">
+                            <a href="{% url 'products:products-detail' product.slug %}">بیشتر</a>
+                        </div>
+
+                    </div>
+                    {% if product.inventory == 0 %}
+                        <button class="btn btn-danger btn-block disabled">اتمام موجودی</button>
+                    {% else %}
+                        <div class="price">
+
+                            {% if product.cash_discount %}
+                                <strong>قیمت:{{ product.cash_reduce }}</strong><br>
+                                <p style="color: red">{{ product.price }}</p>
+                            {% elif product.percent_discount %}
+                                <strong>قیمت:{{ product.percent_reduce }}</strong><br>
+                                <p style="color: red">{{ product.price }}</p>
+                            {% else %}
+                                <strong>قیمت</strong>: {{ product.price }}
+                            {% endif %}
+                        </div>
+                        <input class=" btn btn-primary" type="submit" value="افزودن به سبد" id="{{ product.slug }}">
+                        <script>
+                            $(document).ready(function () {
+                                $("#{{ product.slug }}").click(function () {
+                                    $.ajax({
+                                        url: "{% url 'order:order-api:order-create' %}",
+                                        headers: {
+                                            'X-CSRFToken': "{{ csrf_token }}",
+                                        },
+                                        data: {
+                                            "slug": "{{ product.slug }}",
+                                            "path": "{{ request.path }}"
+                                        },
+                                        type: "post",
+                                        dataType: "json",
+                                        success: function (data) {
+                                            $('#count').html(data.count)
+                                        },
+                                    })
+                                })
+                            });
+                        </script>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        There Are No Products
+    {% endif %}
+
+{% endblock %}

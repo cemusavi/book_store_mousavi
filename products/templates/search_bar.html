@@ -1,0 +1,5 @@
+<form action="{% url 'products:search' %}" method="get">
+    <div>
+        <input  type="text" name="search" value="{{ request.GET.search }}">
+    </div>
+</form>

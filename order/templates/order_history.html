@@ -1,0 +1,21 @@
+{% extends 'shared/_Main_page.html' %}
+
+{% block content %}
+    {% if in_complete_order.orders.all %}
+        {% for order in in_complete_order.orders.all %}
+            <h3>{{ order.order.user }}</h3>
+            <h3 style="color: red">پرداخت نشده</h3>
+        {% endfor %}
+        <br><br>
+    {% endif %}
+    {% if done_orders %}
+        {% for order in done_orders %}
+            <h3>{{ order.user }}</h3>
+            <h3>{{ order.payment_date }}</h3>
+            <h3>{{ order.address }}</h3>
+            <h3>{{ order.price }}</h3>
+            <h3 style="color: green">پرداخت شده</h3>
+            <br>
+        {% endfor %}
+    {% endif %}
+{% endblock %}

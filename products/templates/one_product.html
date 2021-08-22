@@ -1,0 +1,46 @@
+{% extends 'shared/_Main_page.html' %}
+
+{% block content %}
+
+
+    <div>
+        <div>
+            <h5></h5>
+        </div>
+    </div>
+
+
+
+
+
+
+    This is my product {{ book }}.
+
+    {#    <form action="{% url 'order:order-create' %}" method="post">#}
+    {#        <br><br>#}
+    {#        {% csrf_token %}#}
+    {#        <input type="hidden" value="{{ book.slug }}" name="slug">#}
+    {#        <br><br>#}
+    {#        <button type="submit"> +</button>#}
+    {#    </form>#}
+
+    <input type="hidden" value="{{ book.slug }}" name="slug">
+    <br><br>
+    <button type="submit" id="submit"> +</button>
+    <script>
+        $(document).ready(function () {
+            $('#submit').click(function () {
+                $.ajax({
+                    url: "{{ request.path }}",
+                    type: "post",
+                    headers: {'X-CSRFToken': "{{ csrf_token }}"},
+                    data: {
+
+                    }
+                })
+            })
+        })
+
+    </script>
+
+{% endblock %}

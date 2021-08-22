@@ -1,0 +1,39 @@
+{% extends 'shared/_Main_page.html' %}
+
+{% block content %}
+
+    <table>
+        {{ form.as_table }}
+    </table>
+    <input type="submit" value="Add" id="submit"><br><br>
+    <h4 style="color: green" id="successful"></h4>
+    <h4 style="color: red" id="wrong"></h4>
+    <script>
+        $(document).ready(function () {
+            $('#submit').click(function () {
+                $.ajax({
+                    url: "{% url 'address:address-api:add_address' %}",
+                    type: "post",
+                    headers: {
+                        'X-CSRFToken': "{{ csrf_token }}",
+                    },
+                    data: {
+                        "city": $('#id_city').val(),
+                        "exact_address": $('#id_exact_address').val(),
+                    },
+                    success: function (data) {
+                        $('#successful').html('آدرس با موفقیت ثبت شد.');
+                        $('#wrong').html('');
+                        $("#successful").delay(3000).slideUp(600).toggle();
+                    },
+                    error:function (xhr) {
+                        $('#wrong').html('خطایی در ثبت آدرس رخ داد.');
+                        $('#successful').html('');
+                        $("#wrong").delay(3000).slideUp(600).toggle();
+                    }
+                });
+            })
+        })
+    </script>
+
+{% endblock %}

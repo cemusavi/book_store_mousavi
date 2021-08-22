@@ -1,0 +1,20 @@
+{% extends 'shared/_Main_page.html' %}
+
+{% block title %}Home Page{% endblock %}
+
+{% block content %}
+
+
+    {% if request.user.is_authenticated %}
+        <h1 style="text-align: center">
+            Hello, {{ request.user.username }}
+        </h1>
+
+    {% else %}
+        <h1 style="text-align: center">
+            Hello I dont know You please Login!
+        </h1>
+
+    {% endif %}
+
+{% endblock %}

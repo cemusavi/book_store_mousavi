@@ -1,0 +1,50 @@
+{% extends 'shared/_Main_page.html' %}
+
+{% block content %}
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <table>
+            {{ form.as_table }}
+        </table>
+        <input type="submit" value="Edit">
+    </form>
+
+    <input type="submit" value="افزودن آدرس" id="address_btn"> <br><br>
+    <div id="address_div"></div>
+    <script>
+        $(document).ready(function () {
+            $('#address_btn').click(function () {
+                $.ajax({
+                    url: "{% url 'address:add_address' %}",
+                    type: "get",
+                    success: function (data) {
+                        let temp = document.createElement('div');
+                        temp.innerHTML = data;
+                        let requ_data = $(temp).find('.container').html();
+                        $('#address_div').html(requ_data)
+                    },
+                });
+            })
+        })
+    </script>
+    <input type="submit" value="تغییر رمز عبور" id="pass_btn"> <br>
+    <div id="password_div"></div>
+    <script>
+        $(document).ready(function () {
+            $('#pass_btn').click(function () {
+                $.ajax({
+                    url: "{% url 'accounts:change_password' %}",
+                    type: "get",
+                    success: function (data) {
+                        let temp = document.createElement('div');
+                        temp.innerHTML = data;
+                        let requ_data = $(temp).find('.container').html();
+                        $('#password_div').html(requ_data)
+                    },
+                });
+            })
+        })
+    </script>
+
+{% endblock %}

@@ -1,0 +1,155 @@
+{% extends 'shared/_Main_page.html' %}
+{% block title %}سبد سفارشات{% endblock %}
+{% block content %}
+
+    <a href="{% url 'order:order-history' %}">مشاهده ی سابقه ی خرید</a>
+    <br><br>
+    {% if order.orders.all %}
+        <table class="table table-dark ">
+        <thead>
+        <tr>
+            <th scope="col">عنوان کتاب</th>
+            <th scope="col">تعداد سفارش</th>
+            <th scope="col">قیمت</th>
+            <th scope="col">اضافه کردن</th>
+            <th scope="col">کم کردن</th>
+            <th scope="col">تخفیف</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for detail in order.orders.all %}
+            <tr id="tr{{ detail.id }}">
+                <td>{{ detail.book.book.title }}</td>
+                <td id="qua{{ detail.id }}">{{ detail.quantity }}</td>
+                <td id="{{ detail.id }}price">{{ detail.total_price }}</td>
+                <td>
+                    <input type="hidden" value="{{ detail.id }}" name="pk">
+                    <input type="submit" value="+" name="action" id="{{ detail.id }}a">
+                </td>
+
+                <td>
+                    <input type="hidden" value="{{ detail.id }}" name="pk">
+                    <input type="submit" value="-" name="action" id="{{ detail.id }}-">
+                </td>
+                <td id="{{ detail.id }}_total_discount">
+                    {{ detail.total_discount }}
+                </td>
+            </tr>
+            <script>
+                $(document).ready(function () {
+                    $('#{{ detail.id }}a').click(function () {
+                        $.ajax({
+                            url: "{% url 'order:order-api:update-order-detail' %}",
+                            headers: {
+                                'X-CSRFToken': "{{ csrf_token }}",
+                            },
+                            data: {
+                                "pk": "{{ detail.id }}",
+                                "action": "+",
+                            },
+                            type: "patch",
+                            dataType: "json",
+                            success: function (data) {
+                                $('#qua{{ detail.id }}').html(data.quantity);
+                                $('#order_total_price').html(data.order_price);
+                                $('#order_total_discount').html(data.order_discount);
+                                $('#{{ detail.id }}_total_discount').html(data.detail_discount);
+                                $('#{{ detail.id }}price').html(data.detail_price);
+                            },
+<<<<<<< HEAD
+                        });
+                        $.ajax({
+                            url: "{% url 'order:order-create' %}",
+                            type: "get",
+                        });
+=======
+                        })
+>>>>>>> 2e567137b12a8e3fc6bf62255974ab8998a032a4
+                    })
+                })
+            </script>
+            <script>
+                $(document).ready(function () {
+                    $('#{{ detail.id }}-').click(function () {
+                        $.ajax({
+                            url: "{% url 'order:order-api:update-order-detail' %}",
+                            headers: {
+                                'X-CSRFToken': "{{ csrf_token }}",
+                            },
+                            data: {
+                                "pk": "{{ detail.id }}",
+                                "action": "-",
+                            },
+                            type: "patch",
+                            dataType: "json",
+                            success: function (data) {
+                                $('#count').html(data.count);
+                                let target = data.quantity;
+                                if (target == 0) {
+<<<<<<< HEAD
+                                    $('#tr{{ detail.id }}').hide();
+                                    {#$('#cart_table').hide()#}
+                                }
+                                $('#qua{{ detail.id }}').html(data.quantity);
+                                $('#order_total_price').html(data.order_price);
+                                $('#order_total_discount').html(data.order_discount);
+                                $('#{{ detail.id }}_total_discount').html(data.detail_discount);
+                                $('#{{ detail.id }}price').html(data.detail_price);
+                            },
+                        });
+                        $.ajax({
+                            url: "{% url 'order:order-create' %}",
+                            type: "get",
+                        });
+=======
+                                    $('#tr{{ detail.id }}').hide()
+                                    $('#cart_table').hide()
+                                } else {
+                                    $('#qua{{ detail.id }}').html(data.quantity);
+                                    $('#order_total_price').html(data.order_price);
+                                    $('#order_total_discount').html(data.order_discount);
+                                    $('#{{ detail.id }}_total_discount').html(data.detail_discount);
+                                    $('#{{ detail.id }}price').html(data.detail_price);
+                                }
+                            },
+                        })
+>>>>>>> 2e567137b12a8e3fc6bf62255974ab8998a032a4
+                    })
+                });
+            </script>
+        {% endfor %}
+        <a href="{% url 'order:confirm-order' order.id %}">نهایی کردن خرید</a>
+        <br><br><br>
+        <table class="table table-dark" id="cart_table">
+            <thead>
+            <tr>
+                <th>قیمت نهایی</th>
+                <th>مجموع تخفیف</th>
+            </tr>
+
+            </thead>
+
+            <tr>
+                <td id="order_total_price">
+<<<<<<< HEAD
+                    {{ order.price }}
+=======
+                    {{ order.total_price }}
+>>>>>>> 2e567137b12a8e3fc6bf62255974ab8998a032a4
+                </td>
+                <td id="order_total_discount">
+                    {{ order.total_discount }}
+                </td>
+            </tr>
+        </table>
+    {% else %}
+        There are no orders here!
+    {% endif %}
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> 2e567137b12a8e3fc6bf62255974ab8998a032a4
+</tbody>
+</table>
+{% endblock %}

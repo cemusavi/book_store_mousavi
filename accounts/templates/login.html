@@ -1,0 +1,22 @@
+{% extends 'shared/_Main_page.html' %}
+
+{% block content %}
+
+    <form action="" method="post">
+
+        {% csrf_token %}
+        <table>
+            {{ form.as_table }}
+        </table>
+
+        <button type="submit">
+            Login
+        </button>
+    </form>
+    <br><br>
+
+    <a href="{% url 'accounts:register' %}"> حساب کاربری ندارم! </a>
+    <br>
+    <a href="{% url 'accounts:password_reset' %}"> رمز عبور را فراموش کردم! </a>
+
+{% endblock %}

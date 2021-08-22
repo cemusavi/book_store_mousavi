@@ -1,0 +1,75 @@
+{% extends 'shared/_Main_page.html' %}
+
+{% block content %}
+
+    <h4 style="text-align: center">یکی از آدرس های زیر را انتخاب کنید</h4>
+
+    <form method="post">
+        {% csrf_token %}
+        <div style="align-items: center; display: flex; justify-content: center;flex-direction: column">
+            {% for address in request.user.addresses.all %}
+                <input type="radio" name="address" value="{{ address.id }}" id="{{ address.id }}">
+                <label for="{{ address.id }}">{{ address.exact_address }}</label>
+            {% endfor %}
+        </div>
+        <h4 style="text-align: center">یا آدرس مورد نظر را وارد کنید</h4><br><br>
+        {{ form.as_p }}
+
+        <input type="submit" value="نهایی کردن">
+
+    </form>
+    <script>
+        $(document).ready(function () {
+            $('input[type=radio]').click(function () {
+                if (this.previous) {
+                    this.checked = false;
+                }
+                this.previous = this.checked;
+            });
+        });
+    </script>
+    {{ discount_form }}
+    <input type="submit" id="discount_btn" value="اعمال تخفیف">
+    <br><br>
+    <h3 style="color: orangered">
+        مبلغ قابل پرداخت:
+        <span id="final_price">{{ order.price }}</span>
+    </h3>
+    <script>
+        $(document).ready(function () {
+            $('#discount_btn').click(function () {
+                let code = $('#discount_code').val();
+                $.ajax({
+                    url: "{% url 'discount:discount-api:apply-discount' %}",
+                    headers: {
+                        'X-CSRFToken': "{{ csrf_token }}",
+                    },
+                    data: {
+                        "code": code,
+                        "order_id":{{ order.id }},
+                    },
+                    type: "patch",
+                    dataType: "json",
+                    success: function (data) {
+                        $('#final_price').html(data.price)
+                    },
+                    error: function (xhr) {
+                        let result = xhr.status;
+
+                        if (result == 403) {
+                            alert('کد وارد شده صحیح نمیباشد.')
+                        } else if (result == 402) {
+                            alert('کد وارد شده منقضی شده است.')
+                        } else if (result == 400) {
+                            alert('این کد قبلا توسط شما استفاده شده است.')
+                        } else {
+                            alert('کد وارد شده صحیح نمیباشد.')
+                        }
+                    }
+                })
+            })
+        });
+    </script>
+
+
+{% endblock %}

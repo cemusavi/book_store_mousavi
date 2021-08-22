@@ -1,0 +1,14 @@
+{% extends 'shared/_Main_page.html' %}
+
+{% block content %}
+
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <table>
+            {{ form.as_table }}
+            {{ form.errors }}
+        </table>
+        <button type="submit">Register</button>
+    </form>
+
+{% endblock %}
